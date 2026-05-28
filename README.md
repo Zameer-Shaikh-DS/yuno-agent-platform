@@ -1,6 +1,6 @@
 # Yuno Agent Orchestration Platform
 
-AI Agent Orchestration Platform for the **Yuno AI Engineer Challenge** — create agents, configure behavior, connect them in collaborative workflows, and interact via Telegram.
+AI Agent Orchestration Platform for the **Yuno AI Engineer Challenge** — create agents, configure behavior, connect them in collaborative workflows, and interact via Telegram. (The Demo video you can find in demos folder)
 
 ## Architecture
 
