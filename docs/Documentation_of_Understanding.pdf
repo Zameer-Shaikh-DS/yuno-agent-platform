@@ -1,0 +1,370 @@
+%PDF-1.4
+%‚„œ”
+1 0 obj
+<< /Length 2857 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 742 Tm
+(DOCUMENTATION OF MY UNDERSTANDING) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(1. Executive Summary) Tj
+0 -14 Td
+(--------------------) Tj
+0 -14 Td
+(This project is an AI Agent Orchestration Platform designed to let users create configurable AI) Tj
+0 -14 Td
+(agents, connect them in workflows, execute them through a real runtime, and monitor execution) Tj
+0 -14 Td
+(in real time.) Tj
+0 -14 Td
+(The implementation is split into clear layers \(UI, API, runtime, and persistence\), and it) Tj
+0 -14 Td
+(supports both local evaluation mode \(without API keys\) and real-provider mode \(Grok/Groq +) Tj
+0 -14 Td
+(Telegram\).) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(My understanding is that the assessment is not only about writing code, but about proving) Tj
+0 -14 Td
+(product thinking, architecture clarity, runtime realism, and operational usability.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(2. Problem Understanding) Tj
+0 -14 Td
+(------------------------) Tj
+0 -14 Td
+(The challenge requires a working platform where:) Tj
+0 -14 Td
+(? Agents are configurable \(role, prompt, tools, memory, schedules, guardrails, channels\).) Tj
+0 -14 Td
+(? Agents collaborate in workflows \(multi-step, multi-agent\).) Tj
+0 -14 Td
+(? Runtime is real \(not mocked UI behavior\).) Tj
+0 -14 Td
+(? Message history and run traces are persisted and visible.) Tj
+0 -14 Td
+(? At least one external channel is integrated \(Telegram in this implementation\).) Tj
+0 -14 Td
+(? The system runs locally with a simple setup and is demo-ready.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(In short, this is a mini control plane + execution plane for autonomous agent workflows.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(3. Architecture Understanding) Tj
+0 -14 Td
+(-----------------------------) Tj
+0 -14 Td
+(I understand the architecture as four cooperating layers:) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(3.1 Frontend \(React + React Flow\)) Tj
+0 -14 Td
+(? Agent CRUD interface.) Tj
+0 -14 Td
+(? Visual workflow builder \(agent nodes, condition nodes, end nodes\).) Tj
+0 -14 Td
+(? Monitoring interface for runs, events, inter-agent messages, and token usage.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(3.2 Backend API \(FastAPI\)) Tj
+0 -14 Td
+(? Exposes REST APIs for agents, workflows, runs, tools, and monitoring.) Tj
+0 -14 Td
+(? Provides WebSocket/event broadcasting for real-time run updates.) Tj
+0 -14 Td
+(? Handles startup seeding, configuration loading, and channel lifecycle.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(3.3 Runtime Layer \(LangGraph + custom executor\)) Tj
+0 -14 Td
+(? Executes workflow DAGs in topological order.) Tj
+0 -14 Td
+(? Runs individual agents via `run_agent\(...\)`.) Tj
+0 -14 Td
+(? Publishes inter-agent messages.) Tj
+0 -14 Td
+(? Evaluates conditions and controls route progression.) Tj
+0 -14 Td
+(? Records run events and token usage.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(3.4 Persistence Layer \(PostgreSQL / SQLite\)) Tj
+ET
+endstream
+endobj
+2 0 obj
+<< /Length 2636 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 742 Tm
+(? Stores agents, workflows, runs, run events, messages, token usage.) Tj
+0 -14 Td
+(? Stores persistent notes used by tools \(`note_store` DB-backed\).) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(This separation keeps responsibilities clear and supports maintainability.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(4. Why This Runtime Choice Makes Sense) Tj
+0 -14 Td
+(--------------------------------------) Tj
+0 -14 Td
+(The runtime is based on LangGraph with a custom workflow executor.) Tj
+0 -14 Td
+(This combination is practical because:) Tj
+0 -14 Td
+(? LangGraph handles tool-enabled agent behavior well.) Tj
+0 -14 Td
+(? A custom executor gives deterministic workflow control.) Tj
+0 -14 Td
+(? It is easier to add policy checks, condition branching, and audit traces.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(This design balances flexibility and control, which is essential in orchestration systems.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(5. Functional Understanding of Core Flows) Tj
+0 -14 Td
+(-----------------------------------------) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(5.1 Agent Lifecycle) Tj
+0 -14 Td
+(1. User creates/edits agent in UI.) Tj
+0 -14 Td
+(2. Backend validates and persists configuration.) Tj
+0 -14 Td
+(3. Agent becomes selectable inside workflow nodes.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(5.2 Workflow Execution) Tj
+0 -14 Td
+(1. User selects workflow and submits input.) Tj
+0 -14 Td
+(2. Backend creates a run record.) Tj
+0 -14 Td
+(3. Executor resolves workflow nodes and edges.) Tj
+0 -14 Td
+(4. Agent nodes execute in order and pass context forward.) Tj
+0 -14 Td
+(5. Condition nodes evaluate routing logic.) Tj
+0 -14 Td
+(6. Events, messages, and token usage are persisted and streamed.) Tj
+0 -14 Td
+(7. Run status is finalized with output.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(5.3 Monitoring) Tj
+0 -14 Td
+(? UI receives execution events and visualizes run progress.) Tj
+0 -14 Td
+(? Message traces and token usage provide explainability and cost visibility.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(5.4 Telegram Channel) Tj
+0 -14 Td
+(? Telegram bot receives user commands/messages.) Tj
+0 -14 Td
+(? Requests are routed to gateway agent or selected workflow path.) Tj
+0 -14 Td
+(? Responses are sent back to user.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(6. Security and Operational Understanding) Tj
+0 -14 Td
+(-----------------------------------------) Tj
+0 -14 Td
+(From a delivery perspective, the key security principle is secret isolation:) Tj
+0 -14 Td
+(? `.env` is never committed.) Tj
+0 -14 Td
+(? `.env.example` is shared for reproducible setup.) Tj
+0 -14 Td
+(? Mock mode allows assessment verification without exposing real keys.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(Operationally:) Tj
+ET
+endstream
+endobj
+3 0 obj
+<< /Length 2983 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 742 Tm
+(? The platform supports single-command local startup through Docker Compose.) Tj
+0 -14 Td
+(? Health endpoints and tests provide quick validation.) Tj
+0 -14 Td
+(? Event logs and persisted run artifacts improve debuggability.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(7. Changes Applied During Hardening) Tj
+0 -14 Td
+(-----------------------------------) Tj
+0 -14 Td
+(I understand that final quality required small but important hardening changes:) Tj
+0 -14 Td
+(? Removed unused Redis coupling.) Tj
+0 -14 Td
+(? Removed dead `BackgroundTasks` parameter in run execution API.) Tj
+0 -14 Td
+(? Added thread-safe monitor broadcasting using captured event loop.) Tj
+0 -14 Td
+(? Made Telegram workflow execution non-blocking.) Tj
+0 -14 Td
+(? Converted `note_store` from in-memory to persistent DB storage.) Tj
+0 -14 Td
+(? Improved condition routing and backward compatibility.) Tj
+0 -14 Td
+(? Excluded DB/cache artifacts from version control.) Tj
+0 -14 Td
+(? Clarified README for evaluation mode without keys.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(These changes were intentionally minimal to preserve the existing architecture while improving) Tj
+0 -14 Td
+(reliability.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(8. How the Solution Meets Assessment Goals) Tj
+0 -14 Td
+(------------------------------------------) Tj
+0 -14 Td
+(The final system demonstrates:) Tj
+0 -14 Td
+(? Real runtime behavior \(agents actually execute logic and tools\).) Tj
+0 -14 Td
+(? Multi-agent workflow orchestration.) Tj
+0 -14 Td
+(? Persisted communication and monitoring artifacts.) Tj
+0 -14 Td
+(? External channel integration path \(Telegram\).) Tj
+0 -14 Td
+(? Practical local setup for reviewers.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(This directly aligns with the challenge expectations around end-to-end functionality,) Tj
+0 -14 Td
+(architecture quality, and demo readiness.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(9. Risks and Practical Tradeoffs) Tj
+0 -14 Td
+(--------------------------------) Tj
+0 -14 Td
+(No system is perfect; these are known tradeoffs:) Tj
+0 -14 Td
+(? Condition language is intentionally simple \(`always`, `never`, `contains:*`\) for clarity.) Tj
+0 -14 Td
+(? Telegram live demonstration depends on reviewer-provided token.) Tj
+0 -14 Td
+(? Mock mode is ideal for evaluation, while real-provider mode is for production-like behavior.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(These are acceptable tradeoffs for an assessment submission focused on architecture and working) Tj
+0 -14 Td
+(orchestration.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(10. Conclusion) Tj
+0 -14 Td
+(--------------) Tj
+0 -14 Td
+(My core understanding is that this project should be judged as a working orchestration) Tj
+0 -14 Td
+(platform, not just a chatbot demo.) Tj
+0 -14 Td
+(The implementation proves configurable agent design, workflow collaboration, runtime execution,) Tj
+0 -14 Td
+(monitoring visibility, and reproducible local evaluation.) Tj
+0 -14 Td
+() Tj
+0 -14 Td
+(If I were extending this further, I would prioritize policy modules, richer branching) Tj
+ET
+endstream
+endobj
+4 0 obj
+<< /Length 96 >>
+stream
+BT
+/F1 11 Tf
+1 0 0 1 50 742 Tm
+(semantics, and production-grade observability dashboards.) Tj
+ET
+endstream
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+6 0 obj
+<< /Type /Page /Parent 10 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 1 0 R >>
+endobj
+7 0 obj
+<< /Type /Page /Parent 10 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 2 0 R >>
+endobj
+8 0 obj
+<< /Type /Page /Parent 10 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 3 0 R >>
+endobj
+9 0 obj
+<< /Type /Page /Parent 10 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 5 0 R >> >> /Contents 4 0 R >>
+endobj
+10 0 obj
+<< /Type /Pages /Kids [6 0 R 7 0 R 8 0 R 9 0 R] /Count 4 >>
+endobj
+11 0 obj
+<< /Type /Catalog /Pages 10 0 R >>
+endobj
+xref
+0 12
+0000000000 65535 f 
+0000000015 00000 n 
+0000002924 00000 n 
+0000005612 00000 n 
+0000008647 00000 n 
+0000008793 00000 n 
+0000008863 00000 n 
+0000008990 00000 n 
+0000009117 00000 n 
+0000009244 00000 n 
+0000009371 00000 n 
+0000009447 00000 n 
+trailer
+<< /Size 12 /Root 11 0 R >>
+startxref
+9498
+%%EOF
