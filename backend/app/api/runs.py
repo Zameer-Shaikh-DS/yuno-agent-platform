@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from ..database import get_db, SessionLocal
@@ -26,7 +26,6 @@ def _build_agents(db: Session, workflow: Workflow) -> dict[str, Agent]:
 def execute_workflow(
     workflow_id: str,
     body: RunExecuteRequest,
-    background_tasks: BackgroundTasks,
     db: Session = Depends(get_db),
 ):
     wf = db.query(Workflow).filter(Workflow.id == workflow_id).first()

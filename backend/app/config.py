@@ -23,7 +23,6 @@ class Settings(BaseSettings):
     groq_model: str = "llama-3.3-70b-versatile"
     llm_provider: str = ""  # auto | xai | groq
     database_url: str = "sqlite:///./yuno_agents.db"
-    redis_url: str = "redis://localhost:6379/0"
     telegram_bot_token: str = ""
     telegram_default_agent_id: str = ""
     api_host: str = "0.0.0.0"
