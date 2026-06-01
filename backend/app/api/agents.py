@@ -3,8 +3,14 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from ..models.agent import Agent
 from ..schemas.agent import AgentCreate, AgentUpdate, AgentOut
+from ..services.scheduler import agent_scheduler
 
 router = APIRouter(prefix="/agents", tags=["agents"])
+
+
+def _reload_scheduler_if_needed():
+    if agent_scheduler._started:
+        agent_scheduler.reload_jobs()
 
 
 @router.get("", response_model=list[AgentOut])
@@ -20,6 +26,7 @@ def create_agent(body: AgentCreate, db: Session = Depends(get_db)):
     db.add(agent)
     db.commit()
     db.refresh(agent)
+    _reload_scheduler_if_needed()
     return agent
 
 
@@ -42,6 +49,7 @@ def update_agent(agent_id: str, body: AgentUpdate, db: Session = Depends(get_db)
         setattr(agent, k, v)
     db.commit()
     db.refresh(agent)
+    _reload_scheduler_if_needed()
     return agent
 
 

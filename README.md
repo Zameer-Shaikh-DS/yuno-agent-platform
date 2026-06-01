@@ -250,6 +250,14 @@ yuno-agent-platform/
 └── docker-compose.yml    # postgres + api + web
 ```
 
+## HR assessment gaps addressed (post-feedback)
+
+See [docs/HR_FEEDBACK_ADDRESSED.md](docs/HR_FEEDBACK_ADDRESSED.md) for scheduler, guardrails, memory window, and cyclic workflow fixes.
+
+## Security
+
+See [docs/SECURITY.md](docs/SECURITY.md) — `.env` gitignored, guardrails enforced, key rotation guidance.
+
 ## License
 
 MIT — built for Yuno AI Engineer hiring challenge.

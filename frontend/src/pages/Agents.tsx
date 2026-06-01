@@ -148,11 +148,14 @@ export default function AgentsPage() {
 
           {tab === 'Schedule' && (
             <>
-              <label><input type="checkbox" checked={!!(editing.schedule as { enabled?: boolean })?.enabled} onChange={(e) => setEditing({ ...editing, schedule: { ...editing.schedule, enabled: e.target.checked } })} /> Enable schedule</label>
+              <label><input type="checkbox" checked={!!(editing.schedule as { enabled?: boolean })?.enabled} onChange={(e) => setEditing({ ...editing, schedule: { ...editing.schedule, enabled: e.target.checked } })} /> Enable schedule (backend APScheduler runs cron jobs)</label>
               <label>Cron expression</label>
               <input value={(editing.schedule as { cron?: string })?.cron || ''} onChange={(e) => setEditing({ ...editing, schedule: { ...editing.schedule, cron: e.target.value } })} placeholder="0 9 * * *" />
               <label>Timezone</label>
               <input value={(editing.schedule as { timezone?: string })?.timezone || 'UTC'} onChange={(e) => setEditing({ ...editing, schedule: { ...editing.schedule, timezone: e.target.value } })} />
+              <label>Scheduled prompt</label>
+              <textarea rows={2} value={(editing.schedule as { input_template?: string })?.input_template || ''} onChange={(e) => setEditing({ ...editing, schedule: { ...editing.schedule, input_template: e.target.value } })} placeholder="Message sent to agent on each scheduled run" />
+              <p style={{ fontSize: '12px', color: 'var(--muted)' }}>After save, check GET /api/scheduler/jobs for next run time.</p>
             </>
           )}
 

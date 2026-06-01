@@ -120,5 +120,34 @@ def seed_database(db: Session):
             ],
         },
     )
-    db.add_all([research_writer, support_triage])
+    # Feedback-loop template: cyclic graph w1 -> r1 -> w1 when output contains REVISE
+    review_loop = Workflow(
+        name="Quality Review Loop",
+        description="Writer drafts, reviewer replies REVISE (loops back) or APPROVED (ends).",
+        is_template=True,
+        definition={
+            "maxSteps": 20,
+            "maxVisitsPerNode": 3,
+            "nodes": [
+                {"id": "w1", "type": "agent", "position": {"x": 0, "y": 0}, "data": {"agentId": writer.id, "label": "Writer"}},
+                {
+                    "id": "r1",
+                    "type": "agent",
+                    "position": {"x": 300, "y": 0},
+                    "data": {
+                        "agentId": triage.id,
+                        "label": "Reviewer",
+                        "prompt": "Review the draft. Reply with APPROVED if acceptable, otherwise REVISE with brief notes.",
+                    },
+                },
+                {"id": "e1", "type": "end", "position": {"x": 560, "y": 0}, "data": {"label": "End"}},
+            ],
+            "edges": [
+                {"id": "el1", "source": "w1", "target": "r1"},
+                {"id": "el2", "source": "r1", "target": "w1", "label": "feedback", "condition": "contains:REVISE"},
+                {"id": "el3", "source": "r1", "target": "e1", "condition": "contains:APPROVED"},
+            ],
+        },
+    )
+    db.add_all([research_writer, support_triage, review_loop])
     db.commit()

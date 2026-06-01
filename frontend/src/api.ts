@@ -65,3 +65,9 @@ export const runsApi = {
 export const toolsApi = {
   list: () => api.get<{ tools: string[] }>('/tools').then((r) => r.data.tools),
 };
+
+export const schedulerApi = {
+  jobs: () => api.get<{ jobs: unknown[] }>('/scheduler/jobs').then((r) => r.data),
+  reload: () => api.post('/scheduler/reload').then((r) => r.data),
+  logs: () => api.get('/scheduler/logs').then((r) => r.data),
+};

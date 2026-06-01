@@ -11,6 +11,7 @@ from .api.monitor import router as monitor_router
 from .seed import seed_database
 from .channels.telegram_bot import start_telegram_bot, stop_telegram_bot
 from .services.monitor_hub import monitor_hub
+from .services.scheduler import scheduler_service
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("yuno")
@@ -26,7 +27,12 @@ async def lifespan(app: FastAPI):
     finally:
         db.close()
     await start_telegram_bot()
+    scheduler_enabled = "test_yuno.db" not in (settings.database_url or "")
+    if scheduler_enabled:
+        await scheduler_service.start()
     yield
+    if scheduler_enabled:
+        await scheduler_service.stop()
     await stop_telegram_bot()
 
 
